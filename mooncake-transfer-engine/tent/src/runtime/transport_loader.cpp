@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include "tent/runtime/transfer_engine_impl.h"
+#include "transport_plugin_registry.h"
 #include "tent/transport/shm/shm_transport.h"
 #include "tent/transport/tcp/tcp_transport.h"
 #include "tent/transport/hp_tcp/hp_tcp_transport.h"
@@ -156,6 +157,8 @@ Status TransferEngineImpl::loadTransports() {
         transport_list_[FABRIC] = std::make_shared<FabricTransport>();
 #endif
 
+    CHECK_STATUS(
+        instantiateTransportPlugins(*conf_, topology_, transport_list_));
     return Status::OK();
 }
 
